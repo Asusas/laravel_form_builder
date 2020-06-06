@@ -18,4 +18,5 @@ class Automobilis extends Model
 
     protected $table = 'automobiliai';
     protected $fillable = ['markes_id', 'metai', 'created_at', 'updated_at'];
+
 }

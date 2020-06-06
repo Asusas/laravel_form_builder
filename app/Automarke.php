@@ -13,4 +13,5 @@ class Automarke extends Model
 
     protected $table = 'automarkes';
     protected $fillable = ['marke', 'created_at', 'updated_at'];
+
 }

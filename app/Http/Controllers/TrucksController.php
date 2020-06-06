@@ -18,11 +18,22 @@ class TrucksController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $markes = Automobilis::all();
 
-        return view('trucks', compact('markes'));
+        $rusiuotiPagal = 'metai';
+        $rikiuotiPagal = 'desc';
+
+        if ($request->has('rusiuotiPagal')) {
+            $rusiuotiPagal = $request->query('rusiuotiPagal');
+        }
+        if ($request->has('rikiuotiPagal')) {
+            $rikiuotiPagal = $request->query('rikiuotiPagal');
+        }
+        $markes = Automobilis::join('automarkes', 'automobiliai.markes_id', '=', 'automarkes.id')
+            ->orderBy($rusiuotiPagal, $rikiuotiPagal)->get();
+
+        return view('trucks', compact('markes', 'rusiuotiPagal', 'rikiuotiPagal'));
     }
 
     /**
@@ -32,10 +43,6 @@ class TrucksController extends BaseController
      */
     public function create()
     {
-        // $form = $formBuilder->create(TrucksForm::class, [
-        //     'method' => 'POST',
-        //     'url' => route('trucks.store'),
-        // ]);
         $form = $this->form(TrucksForm::class, [
             'method' => 'POST',
             'url' => route('trucks.store'),
@@ -77,7 +84,7 @@ class TrucksController extends BaseController
     {
         $vilkikas = Automarke::findOrFail($id);
 
-        $markes = Automobilis::find($id);
+        $markes = Automobilis::findOrFail($id);
 
         return view('truckInfo', compact(['vilkikas', 'markes']));
     }
